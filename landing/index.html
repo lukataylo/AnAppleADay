@@ -34,14 +34,14 @@
       body {
         color: var(--ink);
         background:
-          radial-gradient(120% 70% at 100% 0%, rgba(255, 140, 90, 0.18), transparent 55%),
-          linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 38%, var(--bg-bottom) 78%, var(--bg-accent) 100%);
-        background-attachment: fixed;
+          radial-gradient(110% 50% at 100% 0%, rgba(255, 140, 90, 0.16), transparent 55%),
+          linear-gradient(180deg, #1a0509 0%, #2a0710 38%, #4a0e1c 72%, #6a1322 100%);
+        background-repeat: no-repeat;
         min-height: 100vh;
         line-height: 1.55;
         -webkit-font-smoothing: antialiased;
       }
-      .wrap { max-width: 880px; margin: 0 auto; padding: 0 22px; }
+      .wrap { max-width: 760px; margin: 0 auto; padding: 0 22px; }
       header {
         display: flex; align-items: center; justify-content: space-between;
         padding: 22px 0;
@@ -59,7 +59,7 @@
         max-width: 16ch; margin: 0 auto;
       }
       .sub {
-        margin: 18px auto 0; max-width: 52ch; font-size: clamp(16px, 2.5vw, 19px);
+        margin: 18px auto 0; max-width: 42ch; font-size: clamp(16px, 2.5vw, 19px);
         color: var(--ink-dim);
       }
       .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
@@ -75,7 +75,7 @@
       section { padding: 44px 0; }
       .eyebrow { color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; }
       h2 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin: 10px 0 14px; letter-spacing: -0.3px; }
-      .lead { color: var(--ink-dim); max-width: 60ch; font-size: 17px; }
+      .lead { color: var(--ink-dim); max-width: 54ch; font-size: 17px; }
 
       .grid { display: grid; gap: 14px; margin-top: 26px; }
       .grid.two { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
@@ -122,10 +122,10 @@
 
       <div class="hero">
         <svg id="eyes" width="200" height="120" viewBox="0 0 200 120" role="img" aria-label="dot-matrix eyes"></svg>
-        <h1>A 30-second check-in that becomes health data you own.</h1>
+        <h1>Notice the change before you feel it.</h1>
         <p class="sub">
-          One question a day. On-device voice and face signals learn your normal.
-          Local-first, never a diagnosis.
+          A 30-second daily check-in that learns your normal, all on your phone.
+          Never a diagnosis.
         </p>
         <div class="cta-row">
           <a class="btn primary" href="#waitlist">Join the waitlist</a>
@@ -199,6 +199,8 @@
       </footer>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
     <script>
       // --- Waitlist: set this to your Formspree form endpoint to collect emails.
       // Create a free form at https://formspree.io and paste its URL here.
@@ -256,6 +258,32 @@
       }
       setInterval(() => { blink = true; setTimeout(() => (blink = false), 140); }, 4200);
       requestAnimationFrame(draw);
+
+      // --- Simple GSAP entrance and scroll animations.
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (window.gsap && !reduce) {
+        gsap.registerPlugin(ScrollTrigger);
+        const e = "power3.out";
+        gsap.from("#eyes", { y: 14, opacity: 0, duration: 0.7, ease: e });
+        gsap.from(".hero h1", { y: 24, opacity: 0, duration: 0.7, delay: 0.1, ease: e });
+        gsap.from(".hero .sub", { y: 20, opacity: 0, duration: 0.7, delay: 0.22, ease: e });
+        gsap.from(".cta-row .btn", { y: 16, opacity: 0, duration: 0.6, delay: 0.34, stagger: 0.1, ease: e });
+
+        gsap.utils.toArray("section").forEach((sec) => {
+          const head = sec.querySelectorAll(".eyebrow, h2, .lead");
+          if (head.length)
+            gsap.from(head, {
+              scrollTrigger: { trigger: sec, start: "top 80%" },
+              y: 22, opacity: 0, duration: 0.6, stagger: 0.08, ease: "power2.out",
+            });
+          const cards = sec.querySelectorAll(".card, .chip");
+          if (cards.length)
+            gsap.from(cards, {
+              scrollTrigger: { trigger: sec, start: "top 72%" },
+              y: 22, opacity: 0, duration: 0.5, stagger: 0.07, ease: "power2.out",
+            });
+        });
+      }
     </script>
   </body>
 </html>
