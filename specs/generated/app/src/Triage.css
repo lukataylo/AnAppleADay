@@ -1,0 +1,101 @@
+/* Triage Styles */
+.triage-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.disposition-badge {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  display: inline-block;
+  margin: 0 auto 20px auto;
+  text-transform: uppercase;
+}
+
+.emergency-999 { background: #ff0000; color: white; }
+.urgent-111 { background: #ff8c00; color: white; }
+.gp-routine { background: #ffd700; color: black; }
+.pharmacy { background: #add8e6; color: black; }
+.self-care { background: #90ee90; color: black; }
+
+.action-list {
+  text-align: left;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.reason-text {
+  font-size: 0.9rem;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+/* Enhanced Disposition Card Styles */
+.disposition-card {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.disposition-card.emergency-999 {
+  background: linear-gradient(135deg, #b30000 0%, #8b0000 100%);
+  border: 2px solid #ff4d4d;
+}
+
+.disposition-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.detail-text {
+  font-size: 1.1rem;
+  line-height: 1.4;
+  margin-bottom: 15px;
+}
+
+.reason-box {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  border-left: 4px solid var(--accent-warm);
+}
+
+.action-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.action-link-button {
+  background: var(--accent-warm);
+  color: var(--deep-red);
+  text-decoration: none;
+  padding: 14px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: bold;
+  display: block;
+  transition: transform 0.1s;
+}
+
+.action-link-button:active {
+  transform: scale(0.97);
+}
+
+.action-text-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  text-align: center;
+}

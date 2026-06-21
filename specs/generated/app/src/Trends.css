@@ -1,0 +1,135 @@
+/* Trends Screen Styles */
+.trends-screen {
+  padding: 20px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.disclaimer-text {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  font-style: italic;
+  margin-bottom: 24px;
+}
+
+.trends-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.trend-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trend-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.trend-label {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.trend-direction {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.trend-direction.improving { color: #4ade80; border: 1px solid #4ade80; }
+.trend-direction.steady { color: #facc15; border: 1px solid #facc15; }
+.trend-direction.needs-a-look { color: #f87171; border: 1px solid #f87171; }
+
+.trend-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.trend-main-val {
+  display: flex;
+  flex-direction: column;
+}
+
+.val-now {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--accent-warm);
+}
+
+.val-meta {
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+.sparkline {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 40px;
+  width: 80px;
+}
+
+.spark-bar {
+  flex: 1;
+  background: var(--accent-warm);
+  border-radius: 2px 2px 0 0;
+  min-width: 6px;
+}
+
+.federated-card {
+  margin-top: 24px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.federated-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--accent-warm);
+}
+
+.federated-card p {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.fl-btn {
+  background: var(--accent-warm);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.fl-btn:disabled {
+  opacity: 0.5;
+}
+
+.fl-result {
+  font-family: monospace;
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 8px;
+  border-radius: 4px;
+  border-left: 3px solid #4ade80;
+}

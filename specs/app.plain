@@ -1,0 +1,81 @@
+---
+import:
+  - typescript-react-app-template
+description: "An Apple a Day: a local-first health check-in PWA. One easy question a day, on-device voice and face signals, an NHS-style follow-up tree, longitudinal trends, and a GP handoff. Not a medical device."
+---
+
+***definitions***
+
+- :Mood: is an integer from 1 to 5 the person taps in answer to "How do you feel today?", where 1 is very low and 5 is very good. The application is the :App: provided by the template.
+
+- :WellbeingIndex: is an integer from 0 to 100 derived from a check-in. It is a heuristic signal for tracking change over time, not a clinical score. Higher is better.
+
+- :VoiceSignal: is a small set of numbers derived on-device from the microphone during a check-in: mean pitch in Hz, pitch variation, a clarity value, loudness, and the share of the take that was silent. The raw audio is never stored.
+
+- :FaceSignal: is a small set of numbers derived on-device from the camera during a check-in: blink rate per minute, smile intensity from 0 to 1, head pose, and a left-right symmetry value. The raw video is never stored.
+
+- :DailyPoint: is one saved check-in with the integer field timestamp (epoch milliseconds) and an optional :Mood:, an optional :WellbeingIndex:, and optional :VoiceSignal: and :FaceSignal: data.
+
+- :DispositionLevel: is one of the values `emergency-999`, `urgent-111`, `gp-routine`, `pharmacy`, or `self-care`, ordered from most to least urgent.
+
+- :Disposition: is the outcome of a triage flow: a :DispositionLevel:, a short title, a plain-language detail, an optional reason, and a list of suggested actions such as calling 999 or NHS 111. It is signposting where the person keeps the decision, never a diagnosis.
+
+- :RedFlag: is a yes-or-no safety question worded closely to NHS.uk. A "yes" routes straight to an urgent :Disposition:. The chest-pain, breathlessness, and headache red flags route to `emergency-999`.
+
+- :PHQ9: is the nine-item depression questionnaire (public domain). Each item is scored 0 (not at all), 1 (several days), 2 (more than half the days), or 3 (nearly every day). The total runs 0 to 27 with bands minimal (0 to 4), mild (5 to 9), moderate (10 to 14), moderately-severe (15 to 19), and severe (20 to 27). Item nine asks about thoughts of being better off dead or of self-harm; if it scores 1 or more the person is routed to urgent help regardless of the total.
+
+- :GAD7: is the seven-item anxiety questionnaire (public domain), scored the same 0 to 3 way, total 0 to 21, with 10 or more being the threshold for further assessment.
+
+- :TriageTree: is the branching set of questions that the easy daily question opens into. The person chooses what is bothering them, answers any :RedFlag: questions, and where relevant completes :PHQ9: or :GAD7:, ending in a :Disposition:. Every path ends in a :Disposition:.
+
+- :MonitoringPlan: is an every-other-day follow-up that switches on when a check-in suggests something worth watching. It records whether it is active, the interval in days, the reason, and when the next check-in is due.
+
+- :HandoffSummary: is a structured summary built from the person's own :DailyPoint: history and triage answers: the concerns raised, any red flags, the latest :Disposition:, and how each signal is trending against the person's own baseline. It carries a disclaimer that it is not a diagnosis.
+
+- :Consent: is the person's recorded choices about reading voice signals, reading face signals, optional federated sharing, and acknowledging that :App: is not a medical device.
+
+***implementation reqs***
+
+- :App: is a mobile-first single-page web app. It presents a single column centered on the page with a maximum width of 480 pixels over a warm gradient background that runs from a deep dark red at the top to a coral red at the bottom.
+
+- :App: stores all data on the device using browser localStorage. It never sends raw audio or video anywhere. The keys are "aad_points" for the list of :DailyPoint: records, "aad_consent" for the :Consent: record, and "aad_monitoring" for the :MonitoringPlan:.
+
+- :App: has a fixed top header showing a small filled circle and the title "An Apple a Day", and a fixed bottom navigation bar with five tabs labelled "Today", "Trends", "Plan", "Share", and "About". Tapping a tab switches the visible screen and the active tab is highlighted in a warm accent colour. The "Today" screen is shown by default.
+
+***test reqs***
+
+- :UnitTests: of :App: are written in TypeScript and run with Vitest. The scoring of :PHQ9: and :GAD7: and the routing of the :TriageTree: are covered by unit tests, including that a chest-pain red flag routes to `emergency-999` and that a :PHQ9: item-nine score of 1 or more routes to urgent help.
+
+***functional specs***
+
+- Implement the entry point for :App: and the five-tab layout described in the implementation requirements.
+
+- On first run, before any tab is shown, :App: presents a :Consent: screen titled "Before we start" that explains everything runs on the device. It offers toggles to read voice signals, to read face signals, and an optional toggle to help improve the shared model, plus a required acknowledgement "I understand this is not a medical device". A "Continue" button is disabled until the acknowledgement is on, and on tap it saves the :Consent: record and reveals the tabs. Once consent is saved this screen is not shown again.
+
+- The "Today" screen shows an animated dot-matrix pair of eyes rendered from a grid of small circles, the question "How do you feel today?", and a row of five mood faces for :Mood:. The eyes blink on a slow interval. After a :Mood: is chosen, a primary "Start video check-in" button and a secondary "Save mood only" button become enabled.
+
+- When "Start video check-in" is tapped, :App: asks for camera and microphone permission, shows the live camera with the dot-matrix eyes overlaid, and records for twelve seconds while a countdown shows. During the take it derives a :VoiceSignal: from the microphone and a :FaceSignal: from the camera on the device. If permission is refused or unavailable, :App: saves the mood only and tells the person the signals are optional. When the take ends it stops the camera and microphone, computes a :WellbeingIndex:, saves a :DailyPoint:, and shows the saved screen.
+
+- When "Save mood only" is tapped, :App: computes a :WellbeingIndex: from the mood alone, saves a :DailyPoint:, and shows the saved screen.
+
+- The saved screen shows today's :WellbeingIndex: as "<value> / 100" with a horizontal bar filled in proportion, a one-line summary of any captured signals, a primary button "Anything bothering you today?" that opens the :TriageTree:, and a secondary "Done for now" button that returns to the start of the "Today" screen.
+
+- Implement the :TriageTree:. The first question is "Is anything bothering you today that you'd like to look into?" with the choices: chest pain or tightness, trouble breathing, a headache, low mood, feeling anxious or worried, feeling very tired, a cough, and nothing in particular. "Nothing in particular" ends in a `self-care` :Disposition:.
+
+- For chest pain, breathlessness, and headache, :App: asks the matching :RedFlag: questions one at a time. A "yes" to any ends immediately in an `emergency-999` :Disposition: that tells the person to call 999. If all are "no", :App: asks a short follow-up that ends in `urgent-111`, `gp-routine`, or `self-care`.
+
+- For low mood, after one safety question :App: runs :PHQ9:. The result maps to a :Disposition:: an item-nine score of 1 or more routes to `urgent-111` and shows the Samaritans number 116 123; otherwise mild or worse routes to `gp-routine` and minimal routes to `self-care`. For anxiety, :App: runs :GAD7:, where 10 or more routes to `gp-routine` and below routes to `self-care`.
+
+- A :Disposition: is shown as a card whose colour reflects its urgency: the `emergency-999` card is red. It shows the title, the detail, the reason, and a button for each action. A "call" action is a phone link, a "link" action opens NHS guidance in a new tab.
+
+- When a triage flow ends in `gp-routine`, `urgent-111`, or `emergency-999`, :App: switches on a :MonitoringPlan: with a two-day interval, unless one is already active.
+
+- The "Trends" screen shows, for each of wellbeing signal, self-reported mood, voice clarity, and blink rate, the latest value, the person's own baseline, a direction of improving, steady, or needs-a-look against that baseline, and a small bar sparkline of recent values. It states these are signals over time, not scores or diagnoses. If there are no check-ins it explains that trends appear after a few.
+
+- The "Trends" screen also shows a "Federated learning (FLock.io)" card explaining that the model improves from everyone's check-ins without anyone sharing their data, and a button that computes a small on-device model update from the person's numbers and reports the federated round it would contribute to, making clear that raw data never leaves the device.
+
+- The "Plan" screen shows the :MonitoringPlan:. When active it shows the interval, the reason, when the next check-in is due, and a button to turn follow-up off. When inactive it explains that follow-up switches on automatically and offers a button to start every-other-day check-ins.
+
+- The "Share" screen builds a :HandoffSummary: from the saved :DailyPoint: history and the latest triage, shows it as readable text with the concerns, any warning signs, and the per-signal trends, and offers a "Copy summary" button. It always shows the disclaimer that the summary is not a diagnosis or a medical device.
+
+- The "About" screen explains that :App: is not a medical device, that it is local-first and stores only derived numbers, shows the saved :Consent: choices, and offers a "Delete all check-ins" button that clears the stored data after the person confirms.
