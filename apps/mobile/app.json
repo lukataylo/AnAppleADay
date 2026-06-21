@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "An Apple a Day",
+    "slug": "an-apple-a-day",
+    "scheme": "appleaday",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#1a0509"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.appleaday.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Used on-device to read facial signals during your check-in. No video is stored or sent.",
+        "NSMicrophoneUsageDescription": "Used on-device to read voice signals during your check-in. No audio is stored or sent."
+      }
+    },
+    "android": {
+      "package": "com.appleaday.app",
+      "permissions": ["android.permission.CAMERA", "android.permission.RECORD_AUDIO"]
+    }
+  }
+}
