@@ -8,16 +8,17 @@ import { PlanScreen } from "@/components/PlanScreen";
 import { ShareScreen } from "@/components/ShareScreen";
 import { AboutScreen } from "@/components/AboutScreen";
 import { ConsentGate } from "@/components/ConsentGate";
+import { Icon } from "@/components/Icon";
 import { isCheckInDue } from "@apple/core";
 
 type Tab = "today" | "trends" | "plan" | "share" | "about";
 
-const TABS: Array<{ id: Tab; label: string; ico: string }> = [
-  { id: "today", label: "Today", ico: "◉" },
-  { id: "trends", label: "Trends", ico: "📈" },
-  { id: "plan", label: "Plan", ico: "🗓" },
-  { id: "share", label: "Share", ico: "📤" },
-  { id: "about", label: "About", ico: "🛈" },
+const TABS: Array<{ id: Tab; label: string; icon: string }> = [
+  { id: "today", label: "Today", icon: "favorite" },
+  { id: "trends", label: "Trends", icon: "show_chart" },
+  { id: "plan", label: "Plan", icon: "event" },
+  { id: "share", label: "Share", icon: "ios_share" },
+  { id: "about", label: "About", icon: "shield" },
 ];
 
 function Shell() {
@@ -69,7 +70,7 @@ function Shell() {
             data-testid={`tab-${t.id}`}
             onClick={() => setTab(t.id)}
           >
-            <span className="ico">{t.ico}</span>
+            <Icon name={t.icon} />
             {t.label}
           </button>
         ))}

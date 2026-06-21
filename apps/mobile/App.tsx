@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { MaterialIcons } from "@expo/vector-icons";
 import { isCheckInDue } from "@apple/core";
+import { palette } from "./src/theme";
 import { Background } from "./src/components/Background";
 import { AppStateProvider, useApp } from "./src/lib/state";
 import { s } from "./src/styles";
@@ -14,12 +16,13 @@ import { ConsentGate } from "./src/screens/ConsentGate";
 
 type Tab = "today" | "trends" | "plan" | "share" | "about";
 
-const TABS: Array<{ id: Tab; label: string; ico: string }> = [
-  { id: "today", label: "Today", ico: "◉" },
-  { id: "trends", label: "Trends", ico: "📈" },
-  { id: "plan", label: "Plan", ico: "🗓" },
-  { id: "share", label: "Share", ico: "📤" },
-  { id: "about", label: "About", ico: "🛈" },
+type MaterialIconName = React.ComponentProps<typeof MaterialIcons>["name"];
+const TABS: Array<{ id: Tab; label: string; icon: MaterialIconName }> = [
+  { id: "today", label: "Today", icon: "favorite" },
+  { id: "trends", label: "Trends", icon: "show-chart" },
+  { id: "plan", label: "Plan", icon: "event" },
+  { id: "share", label: "Share", icon: "ios-share" },
+  { id: "about", label: "About", icon: "shield" },
 ];
 
 function Shell() {
@@ -66,7 +69,11 @@ function Shell() {
       <View style={s.tabbar}>
         {TABS.map((t) => (
           <TouchableOpacity key={t.id} style={s.tab} onPress={() => setTab(t.id)}>
-            <Text style={s.tabIcon}>{t.ico}</Text>
+            <MaterialIcons
+              name={t.icon}
+              size={22}
+              color={tab === t.id ? palette.accent : palette.inkFaint}
+            />
             <Text style={[s.tabLabel, tab === t.id ? s.tabLabelActive : null]}>
               {t.label}
             </Text>
