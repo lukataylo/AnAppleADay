@@ -2,6 +2,8 @@
 
 **A thirty-second check-in that turns "how are you?" into health data you own.**
 
+**Live: https://an-apple-a-day-roan.vercel.app**
+
 Most people cannot tell you how they felt last Tuesday. A GP gets fifteen minutes and spends a third of it just gathering the story. And the richest early signals of how someone is doing, the steadiness of their voice, how tired their face looks, whether their mood is drifting, go uncaptured because no one is measuring them day to day.
 
 An Apple a Day asks one easy question, "How do you feel today?", and listens. While you answer, it reads voice and face signals on your own device and saves a few numbers, never the recording. Over weeks it learns your normal and shows you when you are drifting from it. When something you say warrants it, the easy question opens into the same structured questions a clinician would ask, with hard safety-netting built in. When you are ready, it hands your GP a tidy summary so the appointment starts where it should: with the history already gathered.
