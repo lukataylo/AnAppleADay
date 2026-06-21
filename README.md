@@ -1,61 +1,63 @@
 # An Apple a Day
 
-A local-first health companion. You answer one easy question, "How do you feel today?", on a short check-in. While you talk, the app reads voice and face signals on your own device, saves them, and builds a picture over time of whether you are trending better or worse. When something you say warrants it, the easy question opens into a structured NHS-style set of follow-up questions, and the app can switch on a gentle every-other-day check-in. None of this is a diagnosis. The output is a tidy summary you can choose to hand to your GP, so the appointment starts with the history already gathered.
+**A thirty-second check-in that turns "how are you?" into health data you own.**
 
-Built for a hackathon across three briefs: codeplain (spec-driven build), bilt.me (mobile app and go-to-market), and FLock.io (decentralised, privacy-preserving AI for UK Sovereign AI).
+Most people cannot tell you how they felt last Tuesday. A GP gets fifteen minutes and spends a third of it just gathering the story. And the richest early signals of how someone is doing, the steadiness of their voice, how tired their face looks, whether their mood is drifting, go uncaptured because no one is measuring them day to day.
 
-## What is in here
+An Apple a Day asks one easy question, "How do you feel today?", and listens. While you answer, it reads voice and face signals on your own device and saves a few numbers, never the recording. Over weeks it learns your normal and shows you when you are drifting from it. When something you say warrants it, the easy question opens into the same structured questions a clinician would ask, with hard safety-netting built in. When you are ready, it hands your GP a tidy summary so the appointment starts where it should: with the history already gathered.
+
+It is local-first, it is honest about what it can and cannot know, and it never gives a diagnosis.
+
+## Why this matters
+
+The insight is that the cheapest question gets the most answers. One tap a day keeps people checking in, and consistency is what makes longitudinal signal possible. Voice and face give objective markers that, tracked against a person's own baseline, reveal change a memory cannot. The structured follow-up pre-navigates the NHS question tree, so the work that usually eats a GP appointment is already done. And because everything runs on the device, the privacy promise is real rather than a policy.
+
+This is built for three hackathon briefs at once:
+
+- **codeplain** — spec-driven development. `specs/app.plain` is the source of truth, and codeplain renders it into a working app.
+- **bilt.me** — a real mobile app plus a credible plan for how people find it, use it, and pay.
+- **FLock.io** — decentralised, privacy-preserving AI for UK Sovereign AI. The model improves from everyone's check-ins without anyone sharing their data.
+
+## What it does
+
+- One-tap daily check-in with a friendly dot-matrix face that reacts to your voice.
+- On-device voice signals (steadiness, pauses, clarity) and face signals (blink rate, smile, head pose, symmetry). Raw audio and video never leave the device.
+- An NHS-style triage tree using public-domain instruments (PHQ-9, GAD-7, WHO-5, mMRC) with verbatim NHS red-flag wording. Red flags route to 999, urgent cases to NHS 111, and any sign of self-harm to urgent help with the Samaritans number.
+- Every-other-day follow-up that switches on automatically when something is worth watching, because most people do not remember to come back on their own.
+- Longitudinal trends shown against your own baseline, framed as signals over time, not scores and not diagnoses.
+- A consented GP-handoff summary you choose to share.
+- A FLock federated layer: your device contributes a small model update, never your data.
+
+## How it is built
 
 A pnpm monorepo with one shared brain and two front ends.
 
-- `packages/core` — the shared, platform-agnostic TypeScript core: the clinical instruments (PHQ-9, GAD-7, WHO-5, mMRC), the triage decision tree with red-flag safety-netting, the biomarker math, the trend math, the monitoring scheduler, and the GP-handoff builder. Covered by 66 Vitest unit tests. Both apps consume it, so the clinical logic can never drift between them.
-- `apps/web` — the production web app: a Next.js installable PWA that runs the on-device ML in the browser (MediaPipe Face Landmarker for face signals, Web Audio for voice signals), stores everything locally in IndexedDB, and uses the Vercel AI SDK only to phrase the GP summary (the app is fully usable with no API key). Verified by 14 Playwright end-to-end tests, including a real camera-capture lifecycle.
-- `apps/mobile` — the React Native (Expo) app: the same experience natively, with the dot-matrix eyes and gradient, on-device voice capture via expo-audio, and face signals via react-native-vision-camera in a dev client. Shares 100% of the clinical logic through `@apple/core`.
-- `specs/` — the codeplain `.plain` specifications. `app.plain` is the source of truth; codeplain renders it into a working React app in `specs/generated/app`.
+- `packages/core` — the platform-agnostic clinical core both apps share: instruments, the triage tree with safety-netting, biomarker math, trend math, the monitoring scheduler, and the handoff builder. Covered by 66 unit tests, so the clinical logic cannot drift between platforms.
+- `apps/web` — the production web app: a Next.js installable PWA that runs the on-device ML in the browser (MediaPipe Face Landmarker and Web Audio), stores everything in IndexedDB, and uses the Vercel AI SDK only to phrase the GP summary. Verified by 22 Playwright end-to-end tests, including a real camera-capture lifecycle.
+- `apps/mobile` — the React Native (Expo) app: the same experience natively, sharing 100% of the clinical logic.
+- `specs/` — the codeplain `.plain` specification and the app it renders.
 - `docs/` — sourced research (voice biomarkers, face markers, NHS triage, UK legality) and the build-time compliance guardrails.
+- `landing/` — the marketing landing page and the go-to-market plan in `docs/go-to-market.md`.
 
-## The core idea
+Every part was checked by a separate adversarial reviewer, not signed off by its author, and the external tests caught real bugs that reading the code did not.
 
-One low-effort question keeps people checking in. Voice and face give objective signals that, tracked against a person's own baseline, show change a memory cannot. When an answer warrants it, the NHS-style tree pre-navigates the questions a GP would ask, with hard safety-netting (red flags route to 999, urgent cases to NHS 111, PHQ-9 self-harm responses to urgent help). The result cuts the gathering work out of a short GP appointment and builds longitudinal data, while never offering a diagnosis.
-
-## Running it
-
-Install once at the root:
+## Try it
 
 ```bash
 pnpm install
+pnpm --filter @apple/web dev          # http://localhost:3000
+pnpm --filter @apple/core test        # 66 unit tests
+pnpm --filter @apple/web exec playwright test   # end-to-end
 ```
 
-Web app (the verified surface):
+Deploying the web app to Vercel: import this repo at vercel.com. The root
+`vercel.json` already sets the monorepo build, so no settings are needed.
 
-```bash
-pnpm --filter @apple/web dev        # http://localhost:3000
-pnpm --filter @apple/web build      # production build
-pnpm --filter @apple/web exec playwright test   # end-to-end tests
-```
+## Safety and privacy
 
-Shared core tests:
-
-```bash
-pnpm --filter @apple/core test
-```
-
-Mobile app (needs a dev client for the on-device ML):
-
-```bash
-pnpm --filter @apple/mobile start          # Expo
-# For real face/voice capture, add the native modules and prebuild:
-#   pnpm --filter @apple/mobile add react-native-vision-camera \
-#     react-native-vision-camera-face-detector react-native-worklets-core expo-audio
-#   pnpm --filter @apple/mobile exec expo prebuild
-```
-
-Render the spec with codeplain (from the `specs` directory, with `CODEPLAIN_API_KEY` set):
-
-```bash
-cd specs && codeplain --headless --force-render --build-folder generated app.plain
-```
-
-## Privacy and safety
-
-Voice and face are turned into a small set of numbers on the device. Raw audio and video are never stored or sent. The app is wellbeing logging and general signposting, not a medical device, and does not diagnose. See `docs/compliance.md` for the guardrails and `docs/research/nhs-triage-and-legality.md` for the reasoning and sources.
+An Apple a Day is wellbeing logging and general signposting. It is not a medical
+device, it does not diagnose, and it does not replace a clinician. Voice and face
+become a small set of numbers on your device; the originals are never stored or
+sent. See `docs/compliance.md` for the guardrails and
+`docs/research/nhs-triage-and-legality.md` for the reasoning and sources. Not
+affiliated with the NHS.

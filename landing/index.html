@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>An Apple a Day — a 30-second check-in for your health</title>
+    <meta
+      name="description"
+      content="One easy question a day. On-device voice and face signals build health data you own, with NHS-style follow-up and a tidy summary for your GP. Not a medical device."
+    />
+    <meta property="og:title" content="An Apple a Day" />
+    <meta
+      property="og:description"
+      content="A 30-second check-in that turns 'how are you?' into health data you own. Local-first. Not a diagnosis."
+    />
+    <meta property="og:type" content="website" />
+    <style>
+      :root {
+        --bg-top: #1a0509;
+        --bg-mid: #4a0e1c;
+        --bg-bottom: #8a1a2a;
+        --bg-accent: #c4364a;
+        --ink: #ffffff;
+        --ink-dim: rgba(255, 255, 255, 0.66);
+        --ink-faint: rgba(255, 255, 255, 0.4);
+        --accent: #ffd27a;
+        --card: rgba(40, 10, 18, 0.5);
+        --border: rgba(255, 255, 255, 0.12);
+        font-family: ui-rounded, "SF Pro Rounded", system-ui, -apple-system,
+          Segoe UI, Roboto, sans-serif;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+      body {
+        color: var(--ink);
+        background:
+          radial-gradient(120% 70% at 100% 0%, rgba(255, 140, 90, 0.18), transparent 55%),
+          linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 38%, var(--bg-bottom) 78%, var(--bg-accent) 100%);
+        background-attachment: fixed;
+        min-height: 100vh;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 880px; margin: 0 auto; padding: 0 22px; }
+      header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 22px 0;
+      }
+      .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; }
+      .brand .seed { width: 11px; height: 11px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 14px var(--accent); }
+      .nav-link { color: var(--ink-dim); text-decoration: none; font-size: 14px; font-weight: 600; }
+      .nav-link:hover { color: var(--ink); }
+
+      .hero { text-align: center; padding: 36px 0 16px; }
+      #eyes { margin: 8px auto 26px; display: block; }
+      h1 {
+        font-size: clamp(32px, 7vw, 56px);
+        line-height: 1.05; font-weight: 800; letter-spacing: -0.5px;
+        max-width: 16ch; margin: 0 auto;
+      }
+      .sub {
+        margin: 18px auto 0; max-width: 52ch; font-size: clamp(16px, 2.5vw, 19px);
+        color: var(--ink-dim);
+      }
+      .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+      .btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 14px 22px; border-radius: 14px; font-weight: 700; font-size: 16px;
+        text-decoration: none; border: 1px solid var(--border); color: var(--ink);
+        background: rgba(255, 255, 255, 0.06); transition: transform 0.12s ease, background 0.2s ease;
+      }
+      .btn:hover { transform: translateY(-1px); }
+      .btn.primary { background: var(--accent); color: #2a0a10; border-color: transparent; box-shadow: 0 12px 34px rgba(255, 210, 122, 0.25); }
+
+      section { padding: 44px 0; }
+      .eyebrow { color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; }
+      h2 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin: 10px 0 14px; letter-spacing: -0.3px; }
+      .lead { color: var(--ink-dim); max-width: 60ch; font-size: 17px; }
+
+      .grid { display: grid; gap: 14px; margin-top: 26px; }
+      .grid.two { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+      .grid.steps { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+      .card {
+        background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+        padding: 22px; backdrop-filter: blur(10px);
+      }
+      .card h3 { font-size: 18px; margin-bottom: 6px; }
+      .card p { color: var(--ink-dim); font-size: 15px; }
+      .step-n { color: var(--accent); font-weight: 800; font-size: 14px; letter-spacing: 1px; }
+
+      .trust { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+      .chip {
+        font-size: 13px; font-weight: 600; color: var(--ink-dim);
+        border: 1px solid var(--border); border-radius: 999px; padding: 7px 13px;
+      }
+
+      .signup {
+        background: var(--card); border: 1px solid var(--border); border-radius: 22px;
+        padding: 30px; text-align: center; margin-top: 8px;
+      }
+      .signup form { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+      .signup input[type="email"] {
+        flex: 1; min-width: 240px; max-width: 360px;
+        padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.07); color: var(--ink); font-size: 16px;
+      }
+      .signup input::placeholder { color: var(--ink-faint); }
+      .form-note { color: var(--ink-faint); font-size: 13px; margin-top: 12px; }
+      .form-ok { color: var(--accent); font-weight: 700; margin-top: 16px; min-height: 1.4em; }
+
+      footer { padding: 40px 0 56px; color: var(--ink-faint); font-size: 13px; text-align: center; }
+      footer a { color: var(--ink-dim); text-decoration: none; }
+      .disclaimer { max-width: 60ch; margin: 0 auto 14px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="brand"><span class="seed"></span> An Apple a Day</div>
+        <a class="nav-link" href="#waitlist">Join the waitlist →</a>
+      </header>
+
+      <div class="hero">
+        <svg id="eyes" width="200" height="120" viewBox="0 0 200 120" role="img" aria-label="dot-matrix eyes"></svg>
+        <h1>A 30-second check-in that becomes health data you own.</h1>
+        <p class="sub">
+          One easy question a day. Your phone reads voice and face signals on the
+          device, learns your normal, and helps your GP start where it matters.
+          Local-first. Never a diagnosis.
+        </p>
+        <div class="cta-row">
+          <a class="btn primary" href="#waitlist">Join the waitlist</a>
+          <a class="btn" href="#how">See how it works</a>
+        </div>
+      </div>
+
+      <section id="problem">
+        <span class="eyebrow">The problem</span>
+        <h2>The earliest signals go unmeasured.</h2>
+        <p class="lead">
+          People cannot remember how they felt last week, so change creeps in
+          unnoticed. A GP gets fifteen minutes and spends a third of it gathering
+          the story. The steadiness of a voice and the tiredness in a face, the
+          things that drift first, are never tracked between appointments.
+        </p>
+      </section>
+
+      <section id="how">
+        <span class="eyebrow">How it works</span>
+        <h2>Ask. Listen. Notice. Hand off.</h2>
+        <div class="grid steps">
+          <div class="card"><div class="step-n">01 · ASK</div><h3>One easy question</h3><p>"How do you feel today?" A single tap, with a friendly face that reacts to your voice.</p></div>
+          <div class="card"><div class="step-n">02 · LISTEN</div><h3>On-device signals</h3><p>Voice steadiness and pauses, blink rate, smile, head pose. Numbers only, on your phone. The recording is never kept.</p></div>
+          <div class="card"><div class="step-n">03 · NOTICE</div><h3>Your own baseline</h3><p>Trends show when you drift from your normal, and a quiet NHS-style follow-up appears only when it should.</p></div>
+          <div class="card"><div class="step-n">04 · HAND OFF</div><h3>Ready for your GP</h3><p>A tidy summary you choose to share, so the appointment starts with the history already gathered.</p></div>
+        </div>
+      </section>
+
+      <section id="who">
+        <span class="eyebrow">Who it's for</span>
+        <h2>Built for the people who slip through the gaps.</h2>
+        <div class="grid two">
+          <div class="card"><h3>People managing something long-term</h3><p>Low mood, anxiety, a respiratory condition. The every-other-day check-in keeps an honest record between appointments.</p></div>
+          <div class="card"><h3>Carers and family</h3><p>A gentle way to notice when someone you look after is trending the wrong way, before it becomes a crisis.</p></div>
+          <div class="card"><h3>GPs and the NHS</h3><p>Patients arrive with the question tree pre-navigated and longitudinal data in hand, saving minutes that matter.</p></div>
+          <div class="card"><h3>Anyone who wants to stay ahead</h3><p>A thirty-second habit that turns a vague "how are you?" into something you can actually see over time.</p></div>
+        </div>
+        <div class="trust">
+          <span class="chip">Local-first</span>
+          <span class="chip">No audio or video stored</span>
+          <span class="chip">PHQ-9 · GAD-7 · WHO-5 · mMRC</span>
+          <span class="chip">999 / 111 safety-netting</span>
+          <span class="chip">Not a medical device</span>
+        </div>
+      </section>
+
+      <section id="waitlist">
+        <div class="signup">
+          <span class="eyebrow">Early access</span>
+          <h2>Be one of the first to try it.</h2>
+          <p class="lead" style="margin: 0 auto;">
+            We are opening a small early cohort. Leave your email and we will send
+            you the check-in when it is ready, and ask what would make it useful.
+          </p>
+          <form id="waitlist-form">
+            <input type="email" name="email" placeholder="you@email.com" required aria-label="email" />
+            <button class="btn primary" type="submit">Request access</button>
+          </form>
+          <div class="form-ok" id="form-ok" role="status"></div>
+          <p class="form-note">No spam. One email when we launch. Unsubscribe any time.</p>
+        </div>
+      </section>
+
+      <footer>
+        <p class="disclaimer">
+          An Apple a Day is wellbeing logging and general signposting. It is not a
+          medical device and does not provide a diagnosis. In an emergency call 999.
+          Not affiliated with the NHS.
+        </p>
+        <p>
+          <a href="https://github.com/lukataylo/AnAppleADay">GitHub</a> ·
+          Built with codeplain, FLock.io · © An Apple a Day
+        </p>
+      </footer>
+    </div>
+
+    <script>
+      // --- Waitlist: set this to your Formspree form endpoint to collect emails.
+      // Create a free form at https://formspree.io and paste its URL here.
+      const FORMSPREE_ENDPOINT = ""; // e.g. "https://formspree.io/f/abcdwxyz"
+
+      const form = document.getElementById("waitlist-form");
+      const ok = document.getElementById("form-ok");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = new FormData(form).get("email");
+        if (!FORMSPREE_ENDPOINT) {
+          ok.textContent = "Thanks! Connect a form endpoint to start collecting (see code).";
+          form.reset();
+          return;
+        }
+        ok.textContent = "Sending…";
+        try {
+          const res = await fetch(FORMSPREE_ENDPOINT, {
+            method: "POST",
+            headers: { Accept: "application/json" },
+            body: new FormData(form),
+          });
+          ok.textContent = res.ok
+            ? "You're on the list. We'll be in touch."
+            : "Something went wrong. Try again?";
+          if (res.ok) form.reset();
+        } catch {
+          ok.textContent = "Network error. Try again?";
+        }
+      });
+
+      // --- Hero dot-matrix eyes, matching the app.
+      const OPEN = [[0,1,1,1,0],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[0,1,1,1,0]];
+      const BLINK = [[0,0,0,0,0],[0,0,0,0,0],[1,1,1,1,1],[1,1,1,1,1],[0,0,0,0,0],[0,0,0,0,0]];
+      const svg = document.getElementById("eyes");
+      const EYE_W = 5, EYE_H = 6, GAP = 3, COLS = EYE_W * 2 + GAP;
+      const size = 200, cell = size / COLS, litR = cell * 0.36, dimR = cell * 0.12;
+      let blink = false, t = 0;
+      function draw() {
+        const pat = blink ? BLINK : OPEN;
+        const amp = (Math.sin(t / 18) + 1) / 2; // gentle breathing pulse
+        let out = "";
+        for (let eye = 0; eye < 2; eye++) {
+          const off = eye === 0 ? 0 : EYE_W + GAP;
+          for (let r = 0; r < EYE_H; r++) for (let c = 0; c < EYE_W; c++) {
+            const lit = pat[r][c] === 1;
+            const cx = (off + c + 0.5) * cell, cy = (r + 0.5) * cell;
+            const rad = lit ? litR * (1 + amp * 0.12) : dimR;
+            out += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${rad.toFixed(1)}" fill="${lit ? "#ffd27a" : "#ffffff"}" opacity="${lit ? 1 : 0.14}"/>`;
+          }
+        }
+        svg.innerHTML = out;
+        t += 1;
+        requestAnimationFrame(draw);
+      }
+      setInterval(() => { blink = true; setTimeout(() => (blink = false), 140); }, 4200);
+      requestAnimationFrame(draw);
+    </script>
+  </body>
+</html>
