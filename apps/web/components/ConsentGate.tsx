@@ -71,9 +71,8 @@ export function ConsentGate() {
       <div className="screen">
         <h1 className="h1">Before we start</h1>
         <p className="lead">
-          Everything runs on your device. Voice and face are turned into a few
-          numbers and the originals are never stored or sent anywhere. You can
-          change any of this later.
+          Everything runs on your device. Voice and face become a few numbers; the
+          originals are never stored. Change this any time.
         </p>
 
         <Row
@@ -81,28 +80,28 @@ export function ConsentGate() {
           on={voice}
           set={setVoice}
           title="Read voice signals on-device"
-          sub="Pitch, steadiness, and pauses, from the live microphone. No audio is saved."
+          sub="Steadiness and pauses from the mic. No audio is saved."
         />
         <Row
           testid="consent-face"
           on={faceCap}
           set={setFaceCap}
           title="Read face signals on-device"
-          sub="Blink rate, smile, head pose, and symmetry. No video is saved."
+          sub="Blink, smile, head pose. No video is saved."
         />
         <Row
           testid="consent-fed"
           on={fed}
           set={setFed}
           title="Help improve the shared model (optional)"
-          sub="Contribute small, anonymous model updates through FLock. Raw data still never leaves your phone."
+          sub="Anonymous model updates via FLock. Raw data never leaves your phone."
         />
         <Row
           testid="consent-accept"
           on={accepted}
           set={setAccepted}
           title="I understand this is not a medical device"
-          sub="It logs wellbeing and points you to NHS advice. It does not diagnose or replace a clinician."
+          sub="Logs wellbeing and points to NHS advice. It does not diagnose."
         />
 
         <button

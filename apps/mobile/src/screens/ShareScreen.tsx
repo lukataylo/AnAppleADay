@@ -33,8 +33,7 @@ export function ShareScreen() {
     <ScrollView contentContainerStyle={s.screen}>
       <Text style={s.h1}>Hand to your GP</Text>
       <Text style={s.lead}>
-        A short summary built from your own check-ins, so an appointment starts
-        with the history already gathered. You decide whether to share it.
+        A summary built from your check-ins. You decide whether to share it.
       </Text>
       {!summary ? (
         <TouchableOpacity

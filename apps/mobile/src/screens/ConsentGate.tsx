@@ -56,13 +56,13 @@ export function ConsentGate() {
     <ScrollView contentContainerStyle={s.screen}>
       <Text style={s.h1}>Before we start</Text>
       <Text style={s.lead}>
-        Everything runs on your device. Voice and face become a few numbers and
-        the originals are never stored or sent. You can change any of this later.
+        Everything runs on your device. Voice and face become a few numbers; the
+        originals are never stored. Change this any time.
       </Text>
-      <Row on={voice} set={setVoice} title="Read voice signals on-device" sub="Steadiness and pauses from the live microphone. No audio is saved." />
-      <Row on={faceCap} set={setFaceCap} title="Read face signals on-device" sub="Blink, smile, head pose, symmetry. No video is saved." />
-      <Row on={fed} set={setFed} title="Help improve the shared model (optional)" sub="Contribute small anonymous updates through FLock. Raw data still never leaves your phone." />
-      <Row on={accepted} set={setAccepted} title="I understand this is not a medical device" sub="It logs wellbeing and points to NHS advice. It does not diagnose." />
+      <Row on={voice} set={setVoice} title="Read voice signals on-device" sub="Steadiness and pauses from the mic. No audio is saved." />
+      <Row on={faceCap} set={setFaceCap} title="Read face signals on-device" sub="Blink, smile, head pose. No video is saved." />
+      <Row on={fed} set={setFed} title="Help improve the shared model (optional)" sub="Anonymous updates via FLock. Raw data never leaves your phone." />
+      <Row on={accepted} set={setAccepted} title="I understand this is not a medical device" sub="Logs wellbeing and points to NHS advice. It does not diagnose." />
       <TouchableOpacity
         style={[s.btn, s.btnPrimary, !accepted ? s.btnDisabled : null]}
         disabled={!accepted}

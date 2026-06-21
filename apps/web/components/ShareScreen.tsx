@@ -61,8 +61,7 @@ export function ShareScreen() {
     <div className="screen">
       <h1 className="h1">Hand to your GP</h1>
       <p className="lead">
-        A short summary built from your own check-ins, so an appointment starts
-        with the history already gathered. You decide whether to share it.
+        A summary built from your check-ins. You decide whether to share it.
       </p>
 
       {!summary ? (

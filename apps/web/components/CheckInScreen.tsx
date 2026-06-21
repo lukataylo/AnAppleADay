@@ -244,9 +244,8 @@ export function CheckInScreen() {
           <>
             <h1 className="h1">How do you feel today?</h1>
             <p className="lead">
-              One quick check-in. Tap how you feel, then add an optional
-              twelve-second video so the app can read voice and face signals on
-              your device.
+              Tap how you feel. Add a short video to read voice and face signals,
+              all on your device.
             </p>
             <div className="mood-row" style={{ width: "100%" }}>
               {MOODS.map((m, i) => (
@@ -287,9 +286,7 @@ export function CheckInScreen() {
         )}
 
         {phase === "capturing" && (
-          <p className="lead">
-            Tell me in your own words how your day has been. Just keep talking.
-          </p>
+          <p className="lead">Tell me how your day has been. Just keep talking.</p>
         )}
 
         {phase === "saved" && lastPoint && (

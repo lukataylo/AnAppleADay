@@ -21,9 +21,8 @@ export function PlanScreen() {
     <div className="screen">
       <h1 className="h1">Follow-up plan</h1>
       <p className="lead">
-        Most people do not remember how they felt last week. When something is
-        worth watching, the app checks in every other day so the picture stays
-        honest.
+        Most people forget how they felt last week. When it matters, we check in
+        every other day.
       </p>
 
       {monitoring?.active ? (

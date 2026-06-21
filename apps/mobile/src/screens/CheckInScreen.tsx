@@ -157,9 +157,7 @@ export function CheckInScreen() {
         <>
           <Text style={s.h1}>How do you feel today?</Text>
           <Text style={[s.lead, { textAlign: "center" }]}>
-            One quick check-in. Tap how you feel, then add an optional
-            twelve-second voice take so the app can read voice signals on your
-            device.
+            Tap how you feel. Add a short voice take, read on your device.
           </Text>
           <View style={[s.moodRow, { alignSelf: "stretch" }]}>
             {MOODS.map((m, i) => (
@@ -195,7 +193,7 @@ export function CheckInScreen() {
             <Text style={s.pillText}>Listening · {countdown}s</Text>
           </View>
           <Text style={[s.lead, { textAlign: "center" }]}>
-            Tell me in your own words how your day has been. Just keep talking.
+            Tell me how your day has been. Just keep talking.
           </Text>
         </>
       )}

@@ -43,19 +43,17 @@ export function AboutScreen() {
       <div className="card">
         <h2>Not a medical device</h2>
         <p>
-          An Apple a Day logs wellbeing and points you to NHS advice. It does not
-          diagnose, and it does not replace a doctor. Red-flag answers send you to
-          999, and urgent ones to NHS 111.
+          Logs wellbeing and points to NHS advice. It does not diagnose. Red flags
+          route to 999, urgent cases to 111.
         </p>
       </div>
 
       <div className="card">
         <h2>Local-first by design</h2>
         <p>
-          Voice and face are turned into a small set of numbers on your device.
-          The raw audio and video are never stored or uploaded. Your{" "}
-          {points.length} check-in{points.length === 1 ? "" : "s"} live only in
-          this browser.
+          Voice and face become numbers on your device. Raw audio and video are
+          never stored. Your {points.length} check-in
+          {points.length === 1 ? "" : "s"} live only in this browser.
         </p>
       </div>
 

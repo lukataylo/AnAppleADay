@@ -75,9 +75,8 @@ export function TrendsScreen() {
     <div className="screen">
       <h1 className="h1">Your trends</h1>
       <p className="lead">
-        Compared with your own baseline from {points.length} check-in
-        {points.length === 1 ? "" : "s"}. These are signals over time, not scores
-        or diagnoses.
+        Against your own baseline from {points.length} check-in
+        {points.length === 1 ? "" : "s"}. Signals over time, not scores.
       </p>
 
       {METRICS.map((m) => {
@@ -108,9 +107,7 @@ export function TrendsScreen() {
         <h2>Federated learning (FLock.io)</h2>
         <p>
           The model improves from everyone&apos;s check-ins without anyone sharing
-          their data. Your device computes a small update from your own numbers
-          and contributes only that. Raw audio, video, and your records never
-          leave this phone.
+          data. Your device contributes a small update, never your records.
         </p>
         <button
           className="btn"

@@ -18,8 +18,8 @@ export function PlanScreen() {
     <View style={s.screen}>
       <Text style={s.h1}>Follow-up plan</Text>
       <Text style={s.lead}>
-        Most people do not remember how they felt last week. When something is
-        worth watching, the app checks in every other day.
+        Most people forget how they felt last week. When it matters, we check in
+        every other day.
       </Text>
       {monitoring?.active ? (
         <View style={s.card}>

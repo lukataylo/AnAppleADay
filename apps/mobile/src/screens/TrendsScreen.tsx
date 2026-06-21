@@ -79,9 +79,8 @@ export function TrendsScreen() {
     <ScrollView contentContainerStyle={s.screen}>
       <Text style={s.h1}>Your trends</Text>
       <Text style={s.lead}>
-        Compared with your own baseline from {points.length} check-in
-        {points.length === 1 ? "" : "s"}. Signals over time, not scores or
-        diagnoses.
+        Against your own baseline from {points.length} check-in
+        {points.length === 1 ? "" : "s"}. Signals over time, not scores.
       </Text>
       {METRICS.map((m) => {
         const vals = valuesOf(points, m.extract);
