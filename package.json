@@ -1,0 +1,17 @@
+{
+  "name": "an-apple-a-day",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local-first health check-in. Shared core, web PWA, and React Native app.",
+  "scripts": {
+    "test": "pnpm -r test",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test:core": "pnpm --filter @apple/core test",
+    "dev:web": "pnpm --filter @apple/web dev"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "packageManager": "pnpm@10.25.0"
+}

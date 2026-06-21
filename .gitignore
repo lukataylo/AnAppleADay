@@ -1,0 +1,31 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+.venv/
+venv/
+
+# Build output
+dist/
+build/
+.expo/
+.next/
+out/
+*.tsbuildinfo
+*.log
+codeplain.log
+
+# Playwright
+test-results/
+playwright-report/
+apps/web/screenshots/
+
+# Native build output
+apps/mobile/ios/
+apps/mobile/android/
+
+# OS
+.DS_Store
