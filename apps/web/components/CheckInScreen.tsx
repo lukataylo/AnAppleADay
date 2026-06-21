@@ -224,18 +224,24 @@ export function CheckInScreen() {
     <div className="screen">
       <div className="center-stage">
         {phase === "capturing" ? (
-          <div className="video-wrap">
-            <video ref={videoRef} playsInline muted />
-            <div className="eyes-overlay">
-              <DotMatrixEyes phase={eyePhase} level={level} size={180} />
-            </div>
-            <div
-              className="pill"
-              style={{ position: "absolute", top: 12, left: 12 }}
-            >
-              Listening · {countdown}s
-            </div>
-          </div>
+          <>
+            <DotMatrixEyes phase={eyePhase} level={level} size={340} matrix />
+            {/* Camera runs for face signals but is not shown; the dot matrix is
+                what the user sees. */}
+            <video
+              ref={videoRef}
+              playsInline
+              muted
+              style={{
+                position: "absolute",
+                width: 1,
+                height: 1,
+                opacity: 0,
+                pointerEvents: "none",
+              }}
+            />
+            <div className="pill">Listening · {countdown}s</div>
+          </>
         ) : (
           <DotMatrixEyes phase={eyePhase} level={level} size={220} />
         )}

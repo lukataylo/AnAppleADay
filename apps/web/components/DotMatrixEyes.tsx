@@ -63,10 +63,13 @@ export function DotMatrixEyes({
   phase = "idle",
   level = 0,
   size = 200,
+  matrix = false,
 }: {
   phase?: EyePhase;
   level?: number;
   size?: number;
+  /** Render a full grid of dim dots with the eyes lit within it. */
+  matrix?: boolean;
 }) {
   const [blink, setBlink] = useState(false);
   const [look, setLook] = useState(0); // -1..1 horizontal gaze
@@ -129,34 +132,49 @@ export function DotMatrixEyes({
   }, [level, reactive]);
 
   const pattern = patternFor(phase, blink);
-  const cell = size / COLS;
+
+  // In matrix mode the eyes sit inside a wider grid of dim dots.
+  const GCOLS = matrix ? 17 : COLS;
+  const GROWS = matrix ? 11 : EYE_H;
+  const startCol = Math.floor((GCOLS - COLS) / 2);
+  const startRow = Math.floor((GROWS - EYE_H) / 2);
+
+  const cell = size / GCOLS;
   const litBase = cell * 0.36;
   const dimR = cell * 0.12;
   const amp = phase === "speaking" || phase === "listening" ? smooth.current : 0;
   const litR = litBase * (1 + amp * 0.5);
   const accent = "#ffd27a";
-  const height = cell * EYE_H;
+  const height = cell * GROWS;
+
+  // Is grid cell (r,c) a lit dot of one of the two eyes?
+  const eyeLit = (r: number, c: number): boolean => {
+    const er = r - startRow;
+    if (er < 0 || er >= EYE_H) return false;
+    const lc = c - startCol;
+    if (lc >= 0 && lc < EYE_W) return pattern[er]?.[lc] === 1;
+    const rc = c - (startCol + EYE_W + GAP);
+    if (rc >= 0 && rc < EYE_W) return pattern[er]?.[rc] === 1;
+    return false;
+  };
 
   const dots: React.ReactNode[] = [];
-  for (let eye = 0; eye < 2; eye++) {
-    const colOffset = eye === 0 ? 0 : EYE_W + GAP;
-    for (let r = 0; r < EYE_H; r++) {
-      for (let c = 0; c < EYE_W; c++) {
-        const lit = pattern[r]?.[c] === 1;
-        const cx = (colOffset + c + 0.5) * cell + look * cell * 0.5;
-        const cy = (r + 0.5) * cell;
-        dots.push(
-          <circle
-            key={`${eye}-${r}-${c}`}
-            cx={cx}
-            cy={cy}
-            r={lit ? litR : dimR}
-            fill={lit ? accent : "#ffffff"}
-            opacity={lit ? 1 : 0.14}
-            style={lit ? { filter: `drop-shadow(0 0 ${4 + amp * 8}px ${accent})` } : undefined}
-          />,
-        );
-      }
+  for (let r = 0; r < GROWS; r++) {
+    for (let c = 0; c < GCOLS; c++) {
+      const lit = eyeLit(r, c);
+      const cx = (c + 0.5) * cell + (lit ? look * cell * 0.5 : 0);
+      const cy = (r + 0.5) * cell;
+      dots.push(
+        <circle
+          key={`${r}-${c}`}
+          cx={cx}
+          cy={cy}
+          r={lit ? litR : dimR}
+          fill={lit ? accent : "#ffffff"}
+          opacity={lit ? 1 : 0.12}
+          style={lit ? { filter: `drop-shadow(0 0 ${4 + amp * 8}px ${accent})` } : undefined}
+        />,
+      );
     }
   }
 
@@ -164,7 +182,7 @@ export function DotMatrixEyes({
     <svg
       width={size}
       height={height}
-      viewBox={`0 0 ${cell * COLS} ${height}`}
+      viewBox={`0 0 ${cell * GCOLS} ${height}`}
       role="img"
       aria-label="animated dot-matrix eyes"
       data-phase={phase}

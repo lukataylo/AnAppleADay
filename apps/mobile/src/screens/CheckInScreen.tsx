@@ -151,7 +151,12 @@ export function CheckInScreen() {
 
   return (
     <ScrollView contentContainerStyle={[s.screen, s.center]}>
-      <DotMatrixEyes phase={eyePhase} level={level} size={220} />
+      <DotMatrixEyes
+        phase={eyePhase}
+        level={level}
+        size={phase === "capturing" ? 300 : 220}
+        matrix={phase === "capturing"}
+      />
 
       {phase === "intro" && (
         <>

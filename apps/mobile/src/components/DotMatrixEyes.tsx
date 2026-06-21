@@ -59,10 +59,12 @@ export function DotMatrixEyes({
   phase = "idle",
   level = 0,
   size = 200,
+  matrix = false,
 }: {
   phase?: EyePhase;
   level?: number;
   size?: number;
+  matrix?: boolean;
 }) {
   const [blink, setBlink] = useState(false);
 
@@ -82,30 +84,43 @@ export function DotMatrixEyes({
   }, [phase]);
 
   const pattern = patternFor(phase, blink);
-  const cell = size / COLS;
   const reactive = phase === "speaking" || phase === "listening";
   const amp = reactive ? level : 0;
+
+  const GCOLS = matrix ? 17 : COLS;
+  const GROWS = matrix ? 11 : EYE_H;
+  const startCol = Math.floor((GCOLS - COLS) / 2);
+  const startRow = Math.floor((GROWS - EYE_H) / 2);
+
+  const cell = size / GCOLS;
   const litR = cell * 0.36 * (1 + amp * 0.5);
   const dimR = cell * 0.12;
-  const height = cell * EYE_H;
+  const height = cell * GROWS;
+
+  const eyeLit = (r: number, c: number): boolean => {
+    const er = r - startRow;
+    if (er < 0 || er >= EYE_H) return false;
+    const lc = c - startCol;
+    if (lc >= 0 && lc < EYE_W) return pattern[er]?.[lc] === 1;
+    const rc = c - (startCol + EYE_W + GAP);
+    if (rc >= 0 && rc < EYE_W) return pattern[er]?.[rc] === 1;
+    return false;
+  };
 
   const dots: React.ReactNode[] = [];
-  for (let eye = 0; eye < 2; eye++) {
-    const colOffset = eye === 0 ? 0 : EYE_W + GAP;
-    for (let r = 0; r < EYE_H; r++) {
-      for (let c = 0; c < EYE_W; c++) {
-        const lit = pattern[r]?.[c] === 1;
-        dots.push(
-          <Circle
-            key={`${eye}-${r}-${c}`}
-            cx={(colOffset + c + 0.5) * cell}
-            cy={(r + 0.5) * cell}
-            r={lit ? litR : dimR}
-            fill={lit ? palette.accent : palette.ink}
-            opacity={lit ? 1 : 0.14}
-          />,
-        );
-      }
+  for (let r = 0; r < GROWS; r++) {
+    for (let c = 0; c < GCOLS; c++) {
+      const lit = eyeLit(r, c);
+      dots.push(
+        <Circle
+          key={`${r}-${c}`}
+          cx={(c + 0.5) * cell}
+          cy={(r + 0.5) * cell}
+          r={lit ? litR : dimR}
+          fill={lit ? palette.accent : palette.ink}
+          opacity={lit ? 1 : 0.12}
+        />,
+      );
     }
   }
 
